@@ -116,38 +116,49 @@ export default function HomePage() {
         navigate(`/search?keyword=${encodeURIComponent(keyword)}`)
     }
 
+    const formatPrice = (price?: number) => {
+        if (!price) return "0"
+        return price.toLocaleString("vi-VN")
+    }
+
     return (
         <div className="min-h-screen bg-background">
             {/* Hero Section */}
-            <section className="relative bg-gradient-to-br from-purple-600 via-pink-500 to-orange-400 py-20 md:py-28 text-white overflow-hidden">
-                <div className="absolute inset-0 bg-black/10"></div>
-                <div className="absolute top-0 left-0 w-full h-full overflow-hidden">
-                    <div className="absolute -top-40 -right-40 w-80 h-80 rounded-full bg-purple-400/20 blur-3xl"></div>
-                    <div className="absolute -bottom-40 -left-40 w-80 h-80 rounded-full bg-pink-400/20 blur-3xl"></div>
-                </div>
+            <section
+                className="relative py-20 md:py-28 text-white overflow-hidden bg-cover bg-center"
+                style={{
+                    backgroundImage:
+                        "url('https://extgw.dsc.com.vn/eback/uploads/co_phieu_bat_dong_san_50cbc27782.jpg')",
+                }}
+            >
+                {/* Overlay làm tối ảnh */}
+                <div className="absolute inset-0 bg-black/60"></div>
 
+                {/* Content */}
                 <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                    <h2 className="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-4 animate-fade-in">
+                    <h2 className="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-4">
                         Tìm ngôi nhà mơ ước của bạn
                     </h2>
+
                     <p className="text-lg md:text-xl text-white/90 mb-8 max-w-2xl mx-auto">
                         Khám phá hàng nghìn bất động sản chất lượng cao tại Việt Nam với Bất động sản NgocMinh
                     </p>
 
                     <div className="max-w-2xl mx-auto flex flex-col sm:flex-row gap-4">
                         <div className="relative flex-1">
-                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-white/70 h-5 w-5" />
+                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 h-5 w-5" />
                             <Input
                                 placeholder="Tìm kiếm theo địa điểm, dự án..."
-                                className="pl-10 h-12 rounded-full shadow-lg bg-white/90 backdrop-blur-sm text-black border-0 focus-visible:ring-2 focus-visible:ring-white/50"
+                                className="pl-10 h-12 rounded-full shadow-lg bg-white/95 text-black border-0"
                                 value={keyword}
                                 onChange={(e) => setKeyword(e.target.value)}
-                                onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+                                onKeyDown={(e) => e.key === "Enter" && handleSearch()}
                             />
                         </div>
+
                         <Button
                             size="lg"
-                            className="cursor-pointer rounded-full px-8 bg-white text-purple-600 hover:bg-gray-100 hover:scale-105 transition-all duration-300 shadow-lg"
+                            className="rounded-full px-8 bg-orange-500 hover:bg-orange-600 text-white shadow-lg"
                             onClick={handleSearch}
                         >
                             Tìm kiếm
@@ -156,72 +167,99 @@ export default function HomePage() {
                 </div>
             </section>
 
+
             {/* Property Types Section */}
             <section className="py-16 bg-gradient-to-br from-gray-50 to-gray-100">
                 <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="text-center mb-12">
                         <h3 className="text-3xl font-bold text-foreground mb-4">
-                            Các loại hình bất động sản phổ biền
+                            Các loại hình bất động sản phổ biến
                         </h3>
                         <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
                             Hiểu rõ từng loại hình để lựa chọn đúng nhu cầu của bạn
                         </p>
-                        <div className="w-20 h-1 bg-gradient-to-r from-purple-500 to-pink-500 mx-auto rounded-full mt-4"></div>
+                        <div className="w-20 h-1 bg-gradient-to-r from-purple-500 to-pink-500 mx-auto rounded-full mt-4" />
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                        <Card className="p-6 rounded-2xl shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border-0 bg-white overflow-hidden group">
-                            <div className="h-2 w-full bg-gradient-to-r from-blue-400 to-blue-600 mb-4"></div>
+
+                        <Card
+                            onClick={() => navigate("/properties/house")}
+                            className="cursor-pointer p-6 rounded-2xl shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all bg-white group"
+                        >
+                            <div className="h-2 bg-gradient-to-r from-blue-400 to-blue-600 mb-4" />
                             <CardHeader className="pb-2">
-                                <CardTitle className="text-xl font-semibold text-gray-800 group-hover:text-blue-600 transition-colors">Nhà ở</CardTitle>
+                                <CardTitle className="text-xl font-semibold group-hover:text-blue-600">
+                                    Nhà ở
+                                </CardTitle>
                             </CardHeader>
                             <CardContent className="text-muted-foreground">
-                                Bao gồm nhà phố, biệt thự, liền kề. Thường được mua để ở hoặc cho thuê dài hạn.
+                                Nhà phố, biệt thự, liền kề. Mua để ở hoặc cho thuê dài hạn.
                             </CardContent>
                         </Card>
 
-                        <Card className="p-6 rounded-2xl shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border-0 bg-white overflow-hidden group">
-                            <div className="h-2 w-full bg-gradient-to-r from-green-400 to-green-600 mb-4"></div>
+                        <Card
+                            onClick={() => navigate("/properties/apartment")}
+                            className="cursor-pointer p-6 rounded-2xl shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all bg-white group"
+                        >
+                            <div className="h-2 bg-gradient-to-r from-green-400 to-green-600 mb-4" />
                             <CardHeader className="pb-2">
-                                <CardTitle className="text-xl font-semibold text-gray-800 group-hover:text-green-600 transition-colors">Căn hộ</CardTitle>
+                                <CardTitle className="text-xl font-semibold group-hover:text-green-600">
+                                    Căn hộ
+                                </CardTitle>
                             </CardHeader>
                             <CardContent className="text-muted-foreground">
-                                Chung cư cao tầng, nhiều tiện ích đi kèm, phù hợp với người trẻ và gia đình nhỏ.
+                                Chung cư cao tầng, nhiều tiện ích, phù hợp gia đình trẻ.
                             </CardContent>
                         </Card>
 
-                        <Card className="p-6 rounded-2xl shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border-0 bg-white overflow-hidden group">
-                            <div className="h-2 w-full bg-gradient-to-r from-yellow-400 to-yellow-600 mb-4"></div>
+                        <Card
+                            onClick={() => navigate("/properties/land")}
+                            className="cursor-pointer p-6 rounded-2xl shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all bg-white group"
+                        >
+                            <div className="h-2 bg-gradient-to-r from-yellow-400 to-yellow-600 mb-4" />
                             <CardHeader className="pb-2">
-                                <CardTitle className="text-xl font-semibold text-gray-800 group-hover:text-yellow-600 transition-colors">Đất nền</CardTitle>
+                                <CardTitle className="text-xl font-semibold group-hover:text-yellow-600">
+                                    Đất nền
+                                </CardTitle>
                             </CardHeader>
                             <CardContent className="text-muted-foreground">
-                                Đất chưa xây dựng, tiềm năng tăng giá cao nhưng cần kiểm tra pháp lý và quy hoạch.
+                                Đất chưa xây dựng, tiềm năng tăng giá cao.
                             </CardContent>
                         </Card>
 
-                        <Card className="p-6 rounded-2xl shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border-0 bg-white overflow-hidden group">
-                            <div className="h-2 w-full bg-gradient-to-r from-purple-400 to-purple-600 mb-4"></div>
+                        <Card
+                            onClick={() => navigate("/properties/resort")}
+                            className="cursor-pointer p-6 rounded-2xl shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all bg-white group"
+                        >
+                            <div className="h-2 bg-gradient-to-r from-purple-400 to-purple-600 mb-4" />
                             <CardHeader className="pb-2">
-                                <CardTitle className="text-xl font-semibold text-gray-800 group-hover:text-purple-600 transition-colors">Bất động sản nghỉ dưỡng</CardTitle>
+                                <CardTitle className="text-xl font-semibold group-hover:text-purple-600">
+                                    BĐS nghỉ dưỡng
+                                </CardTitle>
                             </CardHeader>
                             <CardContent className="text-muted-foreground">
-                                Resort, villa, condotel… tại khu du lịch. Thích hợp đầu tư cho thuê ngắn hạn.
+                                Resort, villa, condotel tại khu du lịch.
                             </CardContent>
                         </Card>
-
-                        <Card className="p-6 rounded-2xl shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border-0 bg-white overflow-hidden group md:col-span-2 lg:col-span-4">
-                            <div className="h-2 w-full bg-gradient-to-r from-pink-400 to-pink-600 mb-4"></div>
+                        <Card
+                            onClick={() => navigate("/properties")}
+                            className="cursor-pointer p-6 rounded-2xl shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all bg-white group border-2 border-dashed border-gray-300"
+                        >
+                            <div className="h-2 bg-gradient-to-r from-gray-400 to-gray-600 mb-4" />
                             <CardHeader className="pb-2">
-                                <CardTitle className="text-xl font-semibold text-gray-800 group-hover:text-pink-600 transition-colors">Bất động sản thương mại</CardTitle>
+                                <CardTitle className="text-xl font-semibold group-hover:text-gray-700 flex items-center gap-2">
+                                    📋 Tất cả
+                                </CardTitle>
                             </CardHeader>
                             <CardContent className="text-muted-foreground">
-                                Văn phòng, shophouse, mặt bằng kinh doanh. Lợi nhuận từ cho thuê, khai thác thương mại.
+                                Xem toàn bộ bất động sản đang được đăng bán & cho thuê
                             </CardContent>
                         </Card>
                     </div>
                 </div>
             </section>
+
 
             {/* Featured Properties */}
             <section className="py-16 bg-white">
@@ -305,7 +343,7 @@ export default function HomePage() {
                                     <CardContent>
                                         <div className="flex items-center justify-between mb-3">
                                             <span className="text-xl font-bold bg-gradient-to-r from-purple-600 to-pink-500 text-transparent bg-clip-text">
-                                                {property.price}
+                                                {formatPrice(property.price)} đ
                                             </span>
                                             <div className="flex items-center space-x-1 text-yellow-500">
                                                 <Star className="h-4 w-4 fill-current" />

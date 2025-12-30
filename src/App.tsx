@@ -12,6 +12,7 @@ import Home from "./pages/user/Home";
 import PropertyDetailPage from "./pages/user/PropertyDetailPage";
 import UserLayout from "./layouts/UserLayout";
 import AgentPlanPage from "./pages/agent/AgentPlanPage";
+import PropertyListPage from "./pages/user/PropertyListPage";
 
 function App() {
   return (
@@ -21,9 +22,11 @@ function App() {
           <Route element={<UserLayout />}>
             <Route path="/" element={<Home />} />
             <Route path="/search" element={<SearchPage />} />
+            <Route path="/properties" element={<PropertyListPage />} />
+            <Route path="/properties/:key" element={<PropertyListPage />} />
             <Route path="/property/:id" element={<PropertyDetailPage />} />
-
           </Route>
+
 
           <Route path="/agent/plan" element={<AgentPlanPage />} />
 

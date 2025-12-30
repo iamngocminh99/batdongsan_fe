@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -134,6 +134,8 @@ export default function PropertyuserPage() {
     const [suggestCities, setSuggestCities] = useState<string[]>([]);
     const [suggestWards, setSuggestWards] = useState<string[]>([]);
 
+    const [priceDisplay, setPriceDisplay] = useState("");
+
     // Gọi API hành chính VN depth=3 (1 lần)
     useEffect(() => {
         let mounted = true;
@@ -186,6 +188,35 @@ export default function PropertyuserPage() {
         "latitude",
         "longitude",
     ]);
+
+    const formatVND = (value: string) => {
+        const numeric = value.replace(/\D/g, "");
+        return numeric.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    };
+
+
+    const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const numeric = e.target.value.replace(/\D/g, "");
+
+        setForm((prev) => ({
+            ...prev,
+            price: numeric ? Number(numeric) : 0,
+        }));
+
+        setPriceDisplay(numeric);
+    };
+
+    const handlePriceBlur = () => {
+        if (!form.price) {
+            setPriceDisplay("");
+            return;
+        }
+        setPriceDisplay(form.price.toLocaleString("vi-VN"));
+    };
+
+    const handlePriceFocus = () => {
+        setPriceDisplay(form.price ? String(form.price) : "");
+    };
 
     // Lấy userId từ token
     useEffect(() => {
@@ -247,11 +278,14 @@ export default function PropertyuserPage() {
             floorAreaSqft: undefined,
             landAreaSqft: undefined,
         });
+
+        setPriceDisplay("");
         setSelectedFiles([]);
         setWards([]);
         setSuggestCities([]);
         setSuggestWards([]);
     };
+
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -343,17 +377,24 @@ export default function PropertyuserPage() {
                 floorAreaSqft: p.floorAreaSqft ?? undefined,
                 landAreaSqft: p.landAreaSqft ?? undefined,
             });
+
+            setPriceDisplay(
+                p.price ? p.price.toLocaleString("vi-VN") : ""
+            );
+
             setSuggestCities([]);
             setSuggestWards([]);
             setSelectedFiles([]);
             setOpenDialog(true);
         }, 0);
+
     };
 
 
     const openAddDialog = () => {
         setEditingProperty(null);
         resetForm();
+        setPriceDisplay("");
         setOpenDialog(true);
     };
 
@@ -532,10 +573,14 @@ export default function PropertyuserPage() {
                             <Label>Tên</Label>
                             <Input name="title" value={form.title} onChange={handleChange} />
                         </div>
-                        <div>
-                            <Label>Giá</Label>
-                            <Input name="price" type="number" value={form.price ?? ""} onChange={handleChange} />
-                        </div>
+                        <Input
+                            value={priceDisplay}
+                            onChange={handlePriceChange}
+                            onBlur={handlePriceBlur}
+                            onFocus={handlePriceFocus}
+                            placeholder="1.000.000"
+                            inputMode="numeric"
+                        />
 
                         <div>
                             <Label>Loại giá</Label>

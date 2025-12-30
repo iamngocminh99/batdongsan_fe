@@ -14,7 +14,8 @@ import {
     Check,
     CheckCheck,
 } from "lucide-react"
-import { BottomNavigation } from "../user/component/BottomNavigation"
+import { BottomNavigation } from "../component/BottomNavigation"
+import { PropertyCardMessage } from "@/pages/agent/component/PropertyCardMessage"
 
 interface Partner {
     id: string
@@ -33,25 +34,33 @@ interface Message {
     content: string
     sentAt: string
     readAt: string | null
+
+    propertyId?: string | null
+    propertyTitle?: string | null
+    propertyPrice?: number | null
+    propertyImage?: string | null
 }
 
 const API_BASE = "http://localhost:8080/api/messages"
 
 export default function ChatPage() {
 
+    const { token, user } = useAuth()
+    const myId = user?.id
+
     // nhận dữ liệu owner từ chi tiết bất động sản
     const location = useLocation()
     const ownerFromState = location.state?.owner as Partner | undefined
 
+    const propertyIdFromState = location.state?.propertyId as string | undefined
+    const autoSentRef = useRef(false)
+
     useEffect(() => {
-        if (ownerFromState) {
+        if (ownerFromState && myId && token) {
             setSelectedPartner(ownerFromState)
             fetchConversation(ownerFromState.id)
         }
-    }, [ownerFromState])
-
-    const { token, user } = useAuth()
-    const myId = user?.id
+    }, [ownerFromState, myId, token])
 
     const [partners, setPartners] = useState<Partner[]>([])
     const [selectedPartner, setSelectedPartner] = useState<Partner | null>(null)
@@ -70,17 +79,64 @@ export default function ChatPage() {
             .catch((err) => console.error("Không thể load partners", err))
     }, [myId, token])
 
+    useEffect(() => {
+        if (!ownerFromState || !myId || !token) return
+        if (!propertyIdFromState) return
+        if (!selectedPartner || selectedPartner.id !== ownerFromState.id) return
+        if (autoSentRef.current) return
+
+            ; (async () => {
+                //Load hội thoại trước
+                const conv = await fetchConversation(ownerFromState.id)
+
+                // Nếu đã có message chứa propertyId thì không gửi nữa
+                const existed = conv.some(
+                    (m) => m.propertyId === propertyIdFromState && m.senderId === myId
+                )
+                if (existed) {
+                    autoSentRef.current = true
+                    return
+                }
+
+                //Gửi message có propertyId để BE tự gắn title/price/image
+                try {
+                    autoSentRef.current = true
+                    const payload = {
+                        senderId: myId,
+                        receiverId: ownerFromState.id,
+                        content: "", // muốn có chữ thì: "Mình quan tâm BĐS này ạ"
+                        propertyId: propertyIdFromState,
+                    }
+
+                    const res = await axios.post(`${API_BASE}/send`, payload, {
+                        headers: { Authorization: `Bearer ${token}` },
+                    })
+
+                    setMessages((prev) => [...prev, res.data])
+                } catch (err) {
+                    autoSentRef.current = false
+                    console.error("Auto send property failed", err)
+                }
+            })()
+    }, [ownerFromState, myId, token, propertyIdFromState, selectedPartner])
+
+
     // Load conversation tôi và người đó
-    const fetchConversation = (partnerId: string) => {
-        if (!myId) return
-        axios
-            .get(
+    const fetchConversation = async (partnerId: string) => {
+        if (!myId) return []
+        try {
+            const res = await axios.get(
                 `${API_BASE}/conversation?user1Id=${partnerId}&user2Id=${myId}`,
                 { headers: { Authorization: `Bearer ${token}` } }
             )
-            .then((res) => setMessages(res.data))
-            .catch((err) => console.error("Không thể load hội thoại", err))
+            setMessages(res.data)
+            return res.data as Message[]
+        } catch (err) {
+            console.error("Không thể load hội thoại", err)
+            return []
+        }
     }
+
 
     // Auto scroll xuống cuối khi có message
     useEffect(() => {
@@ -93,6 +149,7 @@ export default function ChatPage() {
             senderId: myId,
             receiverId: selectedPartner.id,
             content: newMessage,
+            propertyId: propertyIdFromState || null,
         }
 
         try {
@@ -261,7 +318,22 @@ export default function ChatPage() {
                                                             : "bg-gray-100 text-gray-800 rounded-bl-none"
                                                             }`}
                                                     >
-                                                        <p className="text-sm">{m.content}</p>
+                                                        {m.propertyId ? (
+                                                            <div className="space-y-2">
+                                                                <PropertyCardMessage
+                                                                    title={m.propertyTitle}
+                                                                    price={m.propertyPrice}
+                                                                    image={m.propertyImage}
+                                                                    detailLink={`/property/${m.propertyId}`}
+                                                                    isMe={isMe}
+                                                                />
+                                                                {!!m.content && <p className="text-sm">{m.content}</p>}
+                                                            </div>
+                                                        ) : (
+                                                            <p className="text-sm">{m.content}</p>
+                                                        )}
+
+
                                                     </div>
                                                     <div
                                                         className={`flex items-center space-x-1 mt-1 text-xs ${isMe ? "justify-end text-blue-100" : "justify-start text-gray-500"

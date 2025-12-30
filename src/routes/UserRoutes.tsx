@@ -6,7 +6,8 @@ import SearchPage from "@/pages/user/SearchPage";
 import ProfilePage from "@/pages/user/ProfilePage";
 import FavoritesPage from "@/pages/user/FavoritesPage";
 import PropertyDetailPage from "@/pages/user/PropertyDetailPage";
-import ChatPage from "@/pages/chat/ChatPage";
+import ChatPage from "@/pages/user/chat/ChatPage";
+import PropertyListPage from "@/pages/user/PropertyListPage";
 
 
 export default function UserRoutes() {

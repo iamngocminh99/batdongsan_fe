@@ -121,14 +121,10 @@ export default function PropertyDetailPage() {
     console.log("propertyDetail:", propertyDetail)
     const [currentImageIndex, setCurrentImageIndex] = useState(0)
 
-    const formatPrice = (price?: number | null) => {
-        if (!price) return "Không có"
-        if (price >= 1_000_000_000) {
-            return `${(price / 1_000_000_000).toFixed(1)} tỷ`
-        }
-        return `${(price / 1_000_000).toFixed(0)} triệu`
+    const formatPrice = (price?: number) => {
+        if (!price) return "0"
+        return price.toLocaleString("vi-VN")
     }
-
 
     const nextImage = () => {
         const length = propertyDetail?.imageUrls?.length ?? 0;
@@ -177,16 +173,15 @@ export default function PropertyDetailPage() {
 
     const handleChatWithOwner = async () => {
         try {
-            const res = await axios.get(
-                `http://localhost:8080/api/properties/${id}/owner`
-            )
+            const res = await axios.get(`http://localhost:8080/api/properties/${id}/owner`)
             const owner = res.data
 
-            navigate("/chat", { state: { owner } })
+            navigate("/chat", { state: { owner, propertyId: id } })
         } catch (err) {
             console.error("Không thể lấy owner:", err)
         }
     }
+
 
 
     return (
@@ -208,8 +203,8 @@ export default function PropertyDetailPage() {
                                 size="icon"
                                 variant="ghost"
                                 className={`cursor-pointer rounded-full p-2 transition-all duration-300 
-    ${isFavorite ? "text-red-500" : "text-gray-600"} 
-    hover:bg-red-100 hover:text-red-500`}
+                                ${isFavorite ? "text-red-500" : "text-gray-600"} 
+                                hover:bg-red-100 hover:text-red-500`}
                                 onClick={toggleFavorite}
                             >
                                 <Heart
@@ -322,6 +317,9 @@ export default function PropertyDetailPage() {
                                 </div>
 
                                 <div className="grid grid-cols-2 gap-4 text-sm">
+                                    <span className="text-xl font-bold bg-gradient-to-r from-purple-600 to-pink-500 text-transparent bg-clip-text">
+                                        {formatPrice(propertyDetail?.price || undefined)} đ
+                                    </span>
                                     <div>
                                         <span className="text-muted-foreground">Trạng thái:</span>
                                         <Badge variant="secondary" className="ml-2">
@@ -489,16 +487,16 @@ export default function PropertyDetailPage() {
                                         <MessageCircle className="h-4 w-4 mr-2" />
                                         Nhắn tin
                                     </Button>
-                                    <Button variant="outline" className="w-full bg-transparent">
+                                    {/* <Button variant="outline" className="w-full bg-transparent">
                                         <Calendar className="h-4 w-4 mr-2" />
                                         Đặt lịch xem
-                                    </Button>
+                                    </Button> */}
                                 </div>
                             </CardContent>
                         </Card>
 
                         {/* Quick Actions */}
-                        <Card>
+                        {/* <Card>
                             <CardHeader>
                                 <CardTitle>Thao tác nhanh</CardTitle>
                             </CardHeader>
@@ -516,7 +514,7 @@ export default function PropertyDetailPage() {
                                     Xem trên bản đồ
                                 </Button>
                             </CardContent>
-                        </Card>
+                        </Card> */}
 
                         {/* Price Calculator */}
                         {/* <Card>

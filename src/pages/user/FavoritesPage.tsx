@@ -84,6 +84,11 @@ export default function FavoritesPage() {
         return new Date(dateString).toLocaleDateString("vi-VN")
     }
 
+    const formatPrice = (price?: number) => {
+        if (!price) return "0"
+        return price.toLocaleString("vi-VN")
+    }
+
     return (
         <div className="min-h-screen bg-background pb-20">
             {/* Header */}
@@ -195,9 +200,7 @@ export default function FavoritesPage() {
                                                 <CardContent className={viewMode === "list" ? "pt-0" : ""}>
                                                     <div className="flex items-center justify-between mb-4">
                                                         <span className="text-2xl font-bold text-accent">
-                                                            {property.price != null
-                                                                ? property.price.toLocaleString("vi-VN")
-                                                                : "Giá đang cập nhật"}
+                                                            {formatPrice(property.price || undefined)} đ
                                                         </span>
                                                         <div className="flex items-center space-x-1">
                                                             <Star className="h-4 w-4 text-yellow-400" />

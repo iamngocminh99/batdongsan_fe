@@ -14,6 +14,7 @@ import {
     Check,
     CheckCheck,
 } from "lucide-react"
+import { PropertyCardMessage } from "../component/PropertyCardMessage"
 
 interface Partner {
     id: string
@@ -32,31 +33,78 @@ interface Message {
     content: string
     sentAt: string
     readAt: string | null
+    propertyId?: string | null
+    propertyTitle?: string | null
+    propertyPrice?: number | null
+    propertyImage?: string | null
 }
 
 const API_BASE = "http://localhost:8080/api/messages"
 
 export default function ChatAgentPage() {
 
+    const { token, user } = useAuth()
+    const myId = user?.id
+
     // nhận dữ liệu owner từ chi tiết bất động sản
     const location = useLocation()
     const ownerFromState = location.state?.owner as Partner | undefined
 
+    const propertyShare = location.state?.propertyShare as
+        | { id?: string; title?: string; price?: number; image?: string }
+        | undefined
+
     useEffect(() => {
-        if (ownerFromState) {
+        if (ownerFromState && myId && token) {
             setSelectedPartner(ownerFromState)
             fetchConversation(ownerFromState.id)
         }
-    }, [ownerFromState])
-
-    const { token, user } = useAuth()
-    const myId = user?.id
+    }, [ownerFromState, myId, token])
 
     const [partners, setPartners] = useState<Partner[]>([])
     const [selectedPartner, setSelectedPartner] = useState<Partner | null>(null)
     const [messages, setMessages] = useState<Message[]>([])
     const [newMessage, setNewMessage] = useState("")
     const messagesEndRef = useRef<HTMLDivElement>(null)
+
+    const autoSentRef = useRef(false)
+
+    useEffect(() => {
+        if (!ownerFromState || !propertyShare?.id || !myId || !token) return
+        if (!selectedPartner || selectedPartner.id !== ownerFromState.id) return
+        if (autoSentRef.current) return
+
+        // nếu đã có message property này rồi thì khỏi gửi lại
+        const existed = messages.some(
+            (m) => m.propertyId === propertyShare.id && m.senderId === myId
+        )
+        if (existed) {
+            autoSentRef.current = true
+            return
+        }
+
+        ; (async () => {
+            try {
+                autoSentRef.current = true
+                const payload = {
+                    senderId: myId,
+                    receiverId: ownerFromState.id,
+                    content: "Mình quan tâm bất động sản này ạ.", // tùy bạn
+                    propertyId: propertyShare.id,
+                }
+
+                const res = await axios.post(`${API_BASE}/send`, payload, {
+                    headers: { Authorization: `Bearer ${token}` },
+                })
+
+                setMessages((prev) => [...prev, res.data])
+            } catch (e) {
+                autoSentRef.current = false
+                console.error("Auto send failed", e)
+            }
+        })()
+    }, [ownerFromState, propertyShare, myId, token, selectedPartner, messages])
+
 
     // Load danh sách tôi nhắn cho ai và ai nhắn cho tôi
     useEffect(() => {
@@ -101,7 +149,11 @@ export default function ChatAgentPage() {
 
             const savedMsg: Message = {
                 ...res.data,
-                senderId: myId, // fix: đảm bảo tin nhắn mới luôn thuộc về tôi
+                senderId: myId,
+                receiverId: selectedPartner.id,
+                content: newMessage,
+                sentAt: res.data.sentAt || new Date().toISOString(),
+                readAt: res.data.readAt || null,
             }
 
             setMessages((prev) => [...prev, savedMsg])
@@ -251,14 +303,27 @@ export default function ChatAgentPage() {
                                                         className={`flex ${isMe ? "justify-end" : "justify-start"}`}
                                                     >
                                                         <div className={`max-w-[80%]`}>
-                                                            <div
-                                                                className={`rounded-2xl px-4 py-3 ${isMe
-                                                                    ? "bg-blue-500 text-white rounded-br-none"
-                                                                    : "bg-gray-100 text-gray-800 rounded-bl-none"
-                                                                    }`}
-                                                            >
-                                                                <p className="text-sm">{m.content}</p>
+                                                            <div className={`rounded-2xl px-4 py-3 ${isMe
+                                                                ? "bg-blue-500 text-white rounded-br-none"
+                                                                : "bg-gray-100 text-gray-800 rounded-bl-none"
+                                                                }`}>
+                                                                {m.propertyId ? (
+                                                                    <div className="space-y-2">
+                                                                        <PropertyCardMessage
+                                                                            title={m.propertyTitle}
+                                                                            price={m.propertyPrice}
+                                                                            image={m.propertyImage}
+                                                                            detailLink={`/property/${m.propertyId}`}
+                                                                            isMe={isMe}
+                                                                        />
+                                                                        {!!m.content && <p className="text-sm">{m.content}</p>}
+                                                                    </div>
+                                                                ) : (
+                                                                    <p className="text-sm">{m.content}</p>
+                                                                )}
+
                                                             </div>
+
                                                             <div
                                                                 className={`flex items-center space-x-1 mt-1 text-xs ${isMe ? "justify-end text-blue-100" : "justify-start text-gray-500"
                                                                     }`}
