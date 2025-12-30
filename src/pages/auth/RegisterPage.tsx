@@ -32,7 +32,7 @@ export default function RegisterPage() {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-amber-50 to-pink-50 flex items-center justify-center p-4">
+        <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-amber-50 to-gray-50 flex items-center justify-center p-4">
             <div className="w-full max-w-md">
                 {/* Header */}
                 <div className="text-center mb-10">
@@ -41,21 +41,21 @@ export default function RegisterPage() {
                             <Home className="h-8 w-8" />
                         </div>
                         <div>
-                            <span className="text-3xl font-bold bg-gradient-to-r from-emerald-600 via-amber-500 to-pink-500 bg-clip-text text-transparent">
+                            <span className="text-3xl font-bold bg-gradient-to-r from-emerald-600 via-amber-500 to-gray-500 bg-clip-text text-transparent">
                                 Ngọc Minh
                             </span>
                             <div className="flex justify-center space-x-1 mt-1">
                                 <Leaf className="h-4 w-4 text-emerald-500" />
                                 <Sun className="h-4 w-4 text-amber-500" />
-                                <Heart className="h-4 w-4 text-pink-500" />
+                                <Heart className="h-4 w-4 text-gray-500" />
                             </div>
                         </div>
                     </Link>
                     <p className="mt-4 text-gray-600">Tạo tài khoản mới của bạn</p>
                 </div>
 
-                <Card className="shadow-xl border-0 overflow-hidden bg-gradient-to-r from-emerald-500 via-amber-400 to-pink-500">
-                    <CardHeader className="bg-gradient-to-r from-emerald-500 via-amber-400 to-pink-500 text-white pb-8">
+                <Card className="shadow-xl border-0 overflow-hidden bg-gradient-to-r from-emerald-500 via-amber-400 to-gray-500">
+                    <CardHeader className="bg-gradient-to-r from-emerald-500 via-amber-400 to-gray-500 text-white pb-8">
                         <CardTitle className="text-2xl font-bold text-center">Đăng ký</CardTitle>
                         <CardDescription className="text-white/90 text-center">
                             Tạo tài khoản mới để bắt đầu
@@ -112,7 +112,7 @@ export default function RegisterPage() {
 
                             <div className="space-y-2">
                                 <Label htmlFor="password" className="text-gray-700 font-medium flex items-center">
-                                    <Lock className="h-4 w-4 mr-2 text-pink-500" />
+                                    <Lock className="h-4 w-4 mr-2 text-gray-500" />
                                     Mật khẩu
                                 </Label>
                                 <Input
@@ -122,7 +122,7 @@ export default function RegisterPage() {
                                     placeholder="Nhập mật khẩu"
                                     onChange={handleChange}
                                     required
-                                    className="border-gray-300 focus:border-pink-500 focus:ring-pink-500 rounded-lg h-12"
+                                    className="border-gray-300 focus:border-gray-500 focus:ring-gray-500 rounded-lg h-12"
                                 />
                             </div>
 
@@ -135,7 +135,7 @@ export default function RegisterPage() {
 
                             <Button
                                 type="submit"
-                                className="w-full bg-gradient-to-r from-emerald-500 via-amber-400 to-pink-500 hover:from-emerald-600 hover:via-amber-500 hover:to-pink-600 text-white font-medium py-3 rounded-lg shadow-md hover:shadow-lg transition-all duration-300"
+                                className="w-full bg-gradient-to-r from-emerald-500 via-amber-400 to-gray-500 hover:from-emerald-600 hover:via-amber-500 hover:to-gray-600 text-white font-medium py-3 rounded-lg shadow-md hover:shadow-lg transition-all duration-300"
                             >
                                 Đăng ký
                             </Button>
@@ -155,7 +155,7 @@ export default function RegisterPage() {
                                 Bạn là môi giới?{" "}
                                 <Link
                                     to="/register-agent"
-                                    className="text-pink-600 font-medium hover:text-pink-800 hover:underline transition-colors"
+                                    className="text-gray-600 font-medium hover:text-gray-800 hover:underline transition-colors"
                                 >
                                     Đăng ký tài khoản môi giới
                                 </Link>

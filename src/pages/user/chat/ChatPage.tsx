@@ -48,12 +48,28 @@ export default function ChatPage() {
     const { token, user } = useAuth()
     const myId = user?.id
 
-    // nhận dữ liệu owner từ chi tiết bất động sản
-    const location = useLocation()
-    const ownerFromState = location.state?.owner as Partner | undefined
+    const routeLocation = useLocation() as {
+        state?: { owner?: Partner; propertyId?: string; shareKey?: string }
+    }
 
-    const propertyIdFromState = location.state?.propertyId as string | undefined
+    const ownerFromState = routeLocation.state?.owner
+    const propertyIdFromState = routeLocation.state?.propertyId
+    const shareKey = routeLocation.state?.shareKey
+
     const autoSentRef = useRef(false)
+
+    const sentKey = shareKey
+        ? `sent_share_${shareKey}`
+        : propertyIdFromState
+            ? `sent_property_${propertyIdFromState}_${ownerFromState?.id}`
+            : null
+
+    const [activePropertyId, setActivePropertyId] = useState<string | null>(() => {
+        if (!propertyIdFromState || !sentKey) return null
+        if (sessionStorage.getItem(sentKey)) return null
+        return propertyIdFromState
+    })
+
 
     useEffect(() => {
         if (ownerFromState && myId && token) {
@@ -81,44 +97,38 @@ export default function ChatPage() {
 
     useEffect(() => {
         if (!ownerFromState || !myId || !token) return
-        if (!propertyIdFromState) return
+        if (!activePropertyId) return
         if (!selectedPartner || selectedPartner.id !== ownerFromState.id) return
         if (autoSentRef.current) return
 
             ; (async () => {
-                //Load hội thoại trước
-                const conv = await fetchConversation(ownerFromState.id)
-
-                // Nếu đã có message chứa propertyId thì không gửi nữa
-                const existed = conv.some(
-                    (m) => m.propertyId === propertyIdFromState && m.senderId === myId
-                )
-                if (existed) {
-                    autoSentRef.current = true
-                    return
-                }
-
-                //Gửi message có propertyId để BE tự gắn title/price/image
                 try {
                     autoSentRef.current = true
-                    const payload = {
-                        senderId: myId,
-                        receiverId: ownerFromState.id,
-                        content: "", // muốn có chữ thì: "Mình quan tâm BĐS này ạ"
-                        propertyId: propertyIdFromState,
-                    }
 
-                    const res = await axios.post(`${API_BASE}/send`, payload, {
-                        headers: { Authorization: `Bearer ${token}` },
-                    })
+                    const res = await axios.post(
+                        `${API_BASE}/send`,
+                        {
+                            senderId: myId,
+                            receiverId: ownerFromState.id,
+                            content: "",
+                            propertyId: activePropertyId,
+                        },
+                        { headers: { Authorization: `Bearer ${token}` } }
+                    )
 
+                    // hiển thị lên UI
                     setMessages((prev) => [...prev, res.data])
-                } catch (err) {
+
+                    if (sentKey) sessionStorage.setItem(sentKey, "true")
+
+                    setActivePropertyId(null)
+                } catch (e) {
                     autoSentRef.current = false
-                    console.error("Auto send property failed", err)
                 }
             })()
-    }, [ownerFromState, myId, token, propertyIdFromState, selectedPartner])
+    }, [ownerFromState, selectedPartner, activePropertyId, myId, token, sentKey])
+
+
 
 
     // Load conversation tôi và người đó
@@ -149,7 +159,7 @@ export default function ChatPage() {
             senderId: myId,
             receiverId: selectedPartner.id,
             content: newMessage,
-            propertyId: propertyIdFromState || null,
+            propertyId: null
         }
 
         try {

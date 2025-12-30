@@ -44,7 +44,7 @@ export default function LoginPage() {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-amber-50 to-pink-50 flex items-center justify-center p-4">
+        <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-amber-50 to-gray-50 flex items-center justify-center p-4">
             <div className="w-full max-w-md">
                 {/* Header */}
                 <div className="text-center mb-10">
@@ -53,21 +53,21 @@ export default function LoginPage() {
                             <Home className="h-8 w-8" />
                         </div>
                         <div>
-                            <span className="text-3xl font-bold bg-gradient-to-r from-emerald-600 via-amber-500 to-pink-500 bg-clip-text text-transparent">
+                            <span className="text-3xl font-bold bg-gradient-to-r from-emerald-600 via-amber-500 to-gray-500 bg-clip-text text-transparent">
                                 Ngọc Minh
                             </span>
                             <div className="flex justify-center space-x-1 mt-1">
                                 <Leaf className="h-4 w-4 text-emerald-500" />
                                 <Sun className="h-4 w-4 text-amber-500" />
-                                <Heart className="h-4 w-4 text-pink-500" />
+                                <Heart className="h-4 w-4 text-gray-500" />
                             </div>
                         </div>
                     </Link>
                     <p className="mt-4 text-gray-600">Chào mừng bạn trở lại!</p>
                 </div>
 
-                <Card className="shadow-xl border-0 overflow-hidden bg-gradient-to-r from-emerald-500 via-amber-400 to-pink-500">
-                    <CardHeader className="bg-gradient-to-r from-emerald-500 via-amber-400 to-pink-500 text-white py-10 rounded-t-lg">
+                <Card className="shadow-xl border-0 overflow-hidden bg-gradient-to-r from-emerald-500 via-amber-400 to-gray-500">
+                    <CardHeader className="bg-gradient-to-r from-emerald-500 via-amber-400 to-gray-500 text-white py-10 rounded-t-lg">
                         <CardTitle className="text-2xl font-bold text-center">Đăng nhập</CardTitle>
                         <CardDescription className="text-white/90 text-center">
                             Nhập thông tin để truy cập tài khoản của bạn
@@ -120,7 +120,7 @@ export default function LoginPage() {
                             </div>
 
                             {error && (
-                                <div className="flex items-center p-3 bg-pink-50 text-pink-700 rounded-lg border border-pink-200">
+                                <div className="flex items-center p-3 bg-gray-50 text-gray-700 rounded-lg border border-gray-200">
                                     <AlertCircle className="h-5 w-5 mr-2" />
                                     <span className="text-sm">{error}</span>
                                 </div>
@@ -129,7 +129,7 @@ export default function LoginPage() {
                             <div className="flex items-center justify-between">
                                 <Link
                                     to="/forgot-password"
-                                    className="text-sm text-pink-600 hover:text-pink-800 hover:underline transition-colors"
+                                    className="text-sm text-gray-600 hover:text-gray-800 hover:underline transition-colors"
                                 >
                                     Quên mật khẩu?
                                 </Link>
@@ -137,7 +137,7 @@ export default function LoginPage() {
 
                             <Button
                                 type="submit"
-                                className="w-full bg-gradient-to-r from-emerald-500 via-amber-400 to-pink-500 hover:from-emerald-600 hover:via-amber-500 hover:to-pink-600 text-white font-medium py-3 rounded-lg shadow-md hover:shadow-lg transition-all duration-300"
+                                className="w-full bg-gradient-to-r from-emerald-500 via-amber-400 to-gray-500 hover:from-emerald-600 hover:via-amber-500 hover:to-gray-600 text-white font-medium py-3 rounded-lg shadow-md hover:shadow-lg transition-all duration-300"
                             >
                                 Đăng nhập
                             </Button>
@@ -148,7 +148,7 @@ export default function LoginPage() {
                                 Chưa có tài khoản?{" "}
                                 <Link
                                     to="/register"
-                                    className="text-pink-600 font-medium hover:text-pink-800 hover:underline transition-colors"
+                                    className="text-gray-600 font-medium hover:text-gray-800 hover:underline transition-colors"
                                 >
                                     Đăng ký ngay
                                 </Link>

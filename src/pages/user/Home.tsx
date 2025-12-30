@@ -229,20 +229,6 @@ export default function HomePage() {
                         </Card>
 
                         <Card
-                            onClick={() => navigate("/properties/resort")}
-                            className="cursor-pointer p-6 rounded-2xl shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all bg-white group"
-                        >
-                            <div className="h-2 bg-gradient-to-r from-purple-400 to-purple-600 mb-4" />
-                            <CardHeader className="pb-2">
-                                <CardTitle className="text-xl font-semibold group-hover:text-purple-600">
-                                    BĐS nghỉ dưỡng
-                                </CardTitle>
-                            </CardHeader>
-                            <CardContent className="text-muted-foreground">
-                                Resort, villa, condotel tại khu du lịch.
-                            </CardContent>
-                        </Card>
-                        <Card
                             onClick={() => navigate("/properties")}
                             className="cursor-pointer p-6 rounded-2xl shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all bg-white group border-2 border-dashed border-gray-300"
                         >

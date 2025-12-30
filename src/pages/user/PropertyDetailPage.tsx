@@ -176,12 +176,15 @@ export default function PropertyDetailPage() {
             const res = await axios.get(`http://localhost:8080/api/properties/${id}/owner`)
             const owner = res.data
 
-            navigate("/chat", { state: { owner, propertyId: id } })
+            // mỗi lần click tạo 1 key mới
+            const shareKey =
+                (crypto as any)?.randomUUID?.() ?? `${Date.now()}_${Math.random().toString(16).slice(2)}`
+
+            navigate("/chat", { state: { owner, propertyId: id, shareKey } })
         } catch (err) {
             console.error("Không thể lấy owner:", err)
         }
     }
-
 
 
     return (
@@ -479,8 +482,8 @@ export default function PropertyDetailPage() {
                                 </div>
 
                                 <div className="space-y-2">
-                                    <Button className="w-full">
-                                        <Phone className="h-4 w-4 mr-2" />
+                                    <Button className="w-full bg-red-500">
+                                        <Phone className="h-4 w-4 mr-2 " />
                                         {propertyDetail?.user?.phone}
                                     </Button>
                                     <Button variant="outline" className="w-full bg-transparent" onClick={handleChatWithOwner}>

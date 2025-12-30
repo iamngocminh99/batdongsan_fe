@@ -79,7 +79,7 @@ function LocationSelector({
                         {suggestProvinces.map((name) => (
                             <li
                                 key={name}
-                                className="px-3 py-2 hover:bg-blue-50 cursor-pointer text-sm"
+                                className="px-3 py-2 hover:bg-gray-50 cursor-pointer text-sm"
                                 onClick={() => {
                                     setProvince(name);
                                     setSuggestProvinces([]);
@@ -109,7 +109,7 @@ function LocationSelector({
                         {suggestWards.map((name) => (
                             <li
                                 key={name}
-                                className="px-3 py-2 hover:bg-blue-50 cursor-pointer text-sm"
+                                className="px-3 py-2 hover:bg-gray-50 cursor-pointer text-sm"
                                 onClick={() => {
                                     setWard(name);
                                     setSuggestWards([]);
@@ -241,10 +241,10 @@ export default function SearchPage() {
     return (
         <div className="min-h-screen bg-gray-50">
             {/* Hero Section with Search */}
-            <div className="bg-gradient-to-r from-blue-400 to-blue-700 text-white">
+            <div className="bg-gradient-to-r from-gray-400 to-gray-700 text-white">
                 <div className="max-w-7xl mx-auto px-4 py-8">
                     <h1 className="text-3xl font-bold mb-2">Tìm kiếm bất động sản</h1>
-                    <p className="text-blue-100 mb-6">Khám phá hàng ngàn căn hộ, nhà ở và đất nền phù hợp với bạn</p>
+                    <p className="text-gray-100 mb-6">Khám phá hàng ngàn căn hộ, nhà ở và đất nền phù hợp với bạn</p>
 
                     {/* Main Search Bar */}
                     <div className="bg-white rounded-lg shadow-xl p-2">
@@ -278,7 +278,7 @@ export default function SearchPage() {
                             </div>
                             <Button
                                 onClick={handleSearch}
-                                className="bg-orange-500 hover:bg-orange-600 text-white px-8 h-12 font-medium cursor-pointer"
+                                className="bg-orange-500 hover:bg-orange-600 text-white px-8 h-12 font-medium"
                                 disabled={loading}
                             >
                                 {loading ? "Đang tìm..." : "Tìm kiếm"}
@@ -297,7 +297,7 @@ export default function SearchPage() {
                             <Button
                                 variant={saleType === "SALE" ? "default" : "outline"}
                                 className={`rounded-lg px-6 py-2 font-medium transition-all ${saleType === "SALE"
-                                    ? "bg-blue-600 text-white shadow-md"
+                                    ? "bg-gray-600 text-white shadow-md"
                                     : "bg-white text-gray-700 border-gray-300 hover:bg-gray-50"
                                     }`}
                                 onClick={() => setSaleType("SALE")}
@@ -307,7 +307,7 @@ export default function SearchPage() {
                             <Button
                                 variant={saleType === "RENT" ? "default" : "outline"}
                                 className={`rounded-lg px-6 py-2 font-medium transition-all ${saleType === "RENT"
-                                    ? "bg-blue-600 text-white shadow-md"
+                                    ? "bg-gray-600 text-white shadow-md"
                                     : "bg-white text-gray-700 border-gray-300 hover:bg-gray-50"
                                     }`}
                                 onClick={() => setSaleType("RENT")}
@@ -319,7 +319,7 @@ export default function SearchPage() {
                             variant="ghost"
                             size="sm"
                             onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
-                            className="text-blue-600 hover:text-blue-700"
+                            className="text-gray-600 hover:text-gray-700"
                         >
                             <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
@@ -341,7 +341,7 @@ export default function SearchPage() {
                                 variant={propertyType === item.value ? "default" : "outline"}
                                 size="sm"
                                 className={`rounded-full transition-all ${propertyType === item.value
-                                    ? "bg-blue-600 text-white shadow-sm"
+                                    ? "bg-gray-600 text-white shadow-sm"
                                     : "bg-white text-gray-700 border-gray-300 hover:bg-gray-50"
                                     }`}
                                 onClick={() => setPropertyType(item.value)}
@@ -453,7 +453,7 @@ export default function SearchPage() {
                                                 variant={direction === item.value ? "default" : "outline"}
                                                 size="sm"
                                                 className={`rounded-full transition-all ${direction === item.value
-                                                    ? "bg-blue-600 text-white shadow-sm"
+                                                    ? "bg-gray-600 text-white shadow-sm"
                                                     : "bg-white text-gray-700 border-gray-300 hover:bg-gray-50"
                                                     }`}
                                                 onClick={() =>
@@ -477,7 +477,7 @@ export default function SearchPage() {
                 <div className="flex justify-between items-center mb-6">
                     <div>
                         <h2 className="text-xl font-semibold text-gray-800">
-                            Tìm thấy <span className="text-blue-600">{results.length}</span> bất động sản
+                            Tìm thấy <span className="text-gray-600">{results.length}</span> bất động sản
                         </h2>
                         {keyword && (
                             <p className="text-sm text-gray-600 mt-1">
@@ -487,7 +487,7 @@ export default function SearchPage() {
                     </div>
                     <div className="flex items-center gap-3">
                         <span className="text-sm text-gray-600">Sắp xếp:</span>
-                        <select className="border border-gray-300 rounded-md px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <select className="border border-gray-300 rounded-md px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-gray-500">
                             <option>Mới nhất</option>
                             <option>Giá tăng dần</option>
                             <option>Giá giảm dần</option>
@@ -520,7 +520,7 @@ export default function SearchPage() {
                                     />
                                     <div className="absolute top-3 left-3">
                                         <span className={`inline-block px-3 py-1 text-xs font-semibold rounded-full ${property.saleType === "SALE"
-                                            ? "bg-blue-600 text-white"
+                                            ? "bg-gray-600 text-white"
                                             : "bg-green-600 text-white"
                                             }`}>
                                             {property.saleType === "SALE" ? "Bán" : "Cho thuê"}
@@ -536,7 +536,7 @@ export default function SearchPage() {
                                     )}
                                 </div>
                                 <div className="p-4">
-                                    <h3 className="font-semibold text-gray-800 mb-2 line-clamp-2 group-hover:text-blue-600 transition-colors">
+                                    <h3 className="font-semibold text-gray-800 mb-2 line-clamp-2 group-hover:text-gray-600 transition-colors">
                                         {property.title}
                                     </h3>
                                     <p className="text-sm text-gray-600 mb-3 flex items-start">
@@ -547,7 +547,7 @@ export default function SearchPage() {
                                         <span className="line-clamp-1">{property.fullAddress}</span>
                                     </p>
                                     <div className="flex items-center justify-between pt-3 border-t">
-                                        <p className="text-lg font-bold text-blue-600">
+                                        <p className="text-lg font-bold text-gray-600">
                                             {property.price?.toLocaleString()} VNĐ
                                         </p>
                                         <div className="flex gap-3 text-sm text-gray-600">
@@ -585,7 +585,7 @@ export default function SearchPage() {
                 {loading && (
                     <div className="flex justify-center py-12">
                         <div className="flex flex-col items-center">
-                            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+                            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-600"></div>
                             <p className="text-gray-600 mt-3">Đang tải kết quả...</p>
                         </div>
                     </div>
