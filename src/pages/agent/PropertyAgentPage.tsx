@@ -480,7 +480,11 @@ export default function PropertyuserPage() {
                                 <TableHead>Tên</TableHead>
                                 <TableHead>Giá</TableHead>
                                 <TableHead>Loại BĐS</TableHead>
+                                <TableHead>Hình thức</TableHead>
+                                <TableHead>Hướng nhà</TableHead>
                                 <TableHead>Hành động</TableHead>
+
+
                             </TableRow>
                         </TableHeader>
                         <TableBody>
@@ -500,6 +504,9 @@ export default function PropertyuserPage() {
                                     <TableCell className="max-w-[220px] truncate">{p.title}</TableCell>
                                     <TableCell>{(p as any).price?.toLocaleString?.() || p.price}</TableCell>
                                     <TableCell>{p.propertyType}</TableCell>
+                                    <TableCell>{p.saleType}</TableCell>
+                                    <TableCell>{p.direction}</TableCell>
+
 
                                     <TableCell className="space-x-2">
                                         <Button className="bg-yellow-400 cursor-pointer" size="sm" variant="secondary" onClick={() => openViewDialogHandler(p)}>
@@ -517,6 +524,7 @@ export default function PropertyuserPage() {
                                             <FaTrashAlt />
                                         </Button>
                                     </TableCell>
+
                                 </TableRow>
                             ))}
                         </TableBody>
@@ -772,20 +780,6 @@ export default function PropertyuserPage() {
                                 onChange={handleChange}
                                 placeholder="106.660172"
                             />
-                        </div>
-
-                        <div>
-                            <Label>Trạng thái</Label>
-                            <Select value={form.status} onValueChange={(val) => handleSelectChange("status", val)}>
-                                <SelectTrigger><SelectValue placeholder="Chọn" /></SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="DRAFT">Nháp</SelectItem>
-                                    <SelectItem value="PENDING">Chờ duyệt</SelectItem>
-                                    <SelectItem value="PUBLISHED">Đã đăng</SelectItem>
-                                    <SelectItem value="SOLD">Đã bán</SelectItem>
-                                    <SelectItem value="RENTED">Đã thuê</SelectItem>
-                                </SelectContent>
-                            </Select>
                         </div>
 
                         <div className="col-span-2">

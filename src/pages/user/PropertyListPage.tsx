@@ -107,14 +107,21 @@ export default function PropertyListPage() {
                                     </p>
 
                                     <div className="flex gap-3 text-gray-600 text-sm">
-                                        {property.propertyType !== "LAND" && (
-                                            <>
-                                                <span>{property.bedrooms} PN</span>
-                                                <span>{property.bathrooms} WC</span>
-                                            </>
+
+                                        {property.propertyType !== "LAND" && (property.bedrooms ?? 0) > 0 && (
+                                            <span>{property.bedrooms} PN</span>
                                         )}
-                                        <span>{property.floorAreaSqft || 0} m²</span>
+
+                                        {property.propertyType !== "LAND" && (property.bathrooms ?? 0) > 0 && (
+                                            <span>{property.bathrooms} WC</span>
+                                        )}
+
+                                        {Number(property.floorAreaSqft) > 0 && (
+                                            <span>{property.floorAreaSqft} m²</span>
+                                        )}
+
                                     </div>
+
                                 </div>
                             </div>
                         </div>

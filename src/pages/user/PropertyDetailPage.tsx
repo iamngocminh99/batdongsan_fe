@@ -186,6 +186,19 @@ export default function PropertyDetailPage() {
         }
     }
 
+    useEffect(() => {
+        if (!propertyDetail?.imageUrls || propertyDetail.imageUrls.length <= 1) return;
+
+        const interval = setInterval(() => {
+            setCurrentImageIndex((prev) =>
+                (prev + 1) % propertyDetail.imageUrls.length
+            );
+        }, 3000);
+
+        return () => clearInterval(interval);
+    }, [propertyDetail?.imageUrls]);
+
+
 
     return (
         <div className="min-h-screen bg-background pb-20">
@@ -230,10 +243,15 @@ export default function PropertyDetailPage() {
                 <div className="relative mb-6">
                     <div className="relative h-64 md:h-80 rounded-lg overflow-hidden">
                         <img
-                            src={propertyDetail?.imageUrls[0] || "/placeholder.svg"}
+                            src={propertyDetail?.imageUrls?.[currentImageIndex] || "/placeholder.svg"}
                             alt="Property"
-                            className="w-full h-full object-cover"
+                            className="
+                                w-full h-full
+                                object-contain
+                                transition-all duration-700
+                            "
                         />
+
                         <Button
                             variant="secondary"
                             size="sm"
@@ -284,40 +302,54 @@ export default function PropertyDetailPage() {
                                             {propertyDetail?.fullAddress}
                                         </CardDescription>
                                     </div>
-                                    {/* <div className="text-right">
-                                        <div className="text-3xl font-bold text-accent">{formatPrice(propertyDetail?.price)}</div>
-                                        <div className="flex items-center space-x-1 mt-1">
-                                            <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-
-                                            <span className="text-sm">{property.rating}</span>
-                                            <span className="text-sm text-muted-foreground">({property.reviews} đánh giá)</span>
-                                        </div>
-                                    </div> */}
                                 </div>
                             </CardHeader>
                             <CardContent>
                                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-                                    <div className="text-center p-3 bg-muted rounded-lg">
-                                        <Bed className="h-6 w-6 mx-auto mb-2 text-accent" />
-                                        <div className="font-semibold">{propertyDetail?.bedrooms}</div>
-                                        <div className="text-sm text-muted-foreground">Phòng ngủ</div>
-                                    </div>
-                                    <div className="text-center p-3 bg-muted rounded-lg">
-                                        <Bath className="h-6 w-6 mx-auto mb-2 text-accent" />
-                                        <div className="font-semibold">{propertyDetail?.bathrooms}</div>
-                                        <div className="text-sm text-muted-foreground">Phòng tắm</div>
-                                    </div>
-                                    <div className="text-center p-3 bg-muted rounded-lg">
-                                        <Square className="h-6 w-6 mx-auto mb-2 text-accent" />
-                                        <div className="font-semibold">{propertyDetail?.area}m²</div>
-                                        <div className="text-sm text-muted-foreground">Diện tích</div>
-                                    </div>
-                                    <div className="text-center p-3 bg-muted rounded-lg">
-                                        <Home className="h-6 w-6 mx-auto mb-2 text-accent" />
-                                        <div className="font-semibold">{propertyDetail?.propertyType}</div>
-                                        <div className="text-sm text-muted-foreground">Loại hình</div>
-                                    </div>
+
+                                    {(propertyDetail?.bedrooms ?? 0) > 0 && (
+                                        <div className="text-center p-3 bg-muted rounded-lg">
+                                            <Bed className="h-6 w-6 mx-auto mb-2 text-accent" />
+                                            <div className="font-semibold">
+                                                {propertyDetail?.bedrooms ?? 0}
+                                            </div>
+                                            <div className="text-sm text-muted-foreground">Phòng ngủ</div>
+                                        </div>
+                                    )}
+
+                                    {(propertyDetail?.bathrooms ?? 0) > 0 && (
+                                        <div className="text-center p-3 bg-muted rounded-lg">
+                                            <Bath className="h-6 w-6 mx-auto mb-2 text-accent" />
+                                            <div className="font-semibold">
+                                                {propertyDetail?.bathrooms ?? 0}
+                                            </div>
+                                            <div className="text-sm text-muted-foreground">Phòng tắm</div>
+                                        </div>
+                                    )}
+
+                                    {Number(propertyDetail?.area) > 0 && (
+                                        <div className="text-center p-3 bg-muted rounded-lg">
+                                            <Square className="h-6 w-6 mx-auto mb-2 text-accent" />
+                                            <div className="font-semibold">
+                                                {propertyDetail?.area} m²
+                                            </div>
+                                            <div className="text-sm text-muted-foreground">Diện tích</div>
+                                        </div>
+                                    )}
+
+
+                                    {propertyDetail?.propertyType && (
+                                        <div className="text-center p-3 bg-muted rounded-lg">
+                                            <Home className="h-6 w-6 mx-auto mb-2 text-accent" />
+                                            <div className="font-semibold">
+                                                {propertyDetail.propertyType}
+                                            </div>
+                                            <div className="text-sm text-muted-foreground">Loại hình</div>
+                                        </div>
+                                    )}
+
                                 </div>
+
 
                                 <div className="grid grid-cols-2 gap-4 text-sm">
                                     <span className="text-xl font-bold bg-gradient-to-r from-purple-600 to-pink-500 text-transparent bg-clip-text">
@@ -355,60 +387,6 @@ export default function PropertyDetailPage() {
                                 <p className="text-muted-foreground leading-relaxed">{propertyDetail?.description}</p>
                             </CardContent>
                         </Card>
-
-                        {/* Features */}
-                        {/* <Card>
-                            <CardHeader>
-                                <CardTitle>Đặc điểm nổi bật</CardTitle>
-                            </CardHeader>
-                            <CardContent>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                                    {property.features.map((feature: string, index: number) => (
-                                        <div key={index} className="flex items-center space-x-2">
-                                            <div className="w-2 h-2 bg-accent rounded-full"></div>
-                                            <span className="text-sm">{feature}</span>
-                                        </div>
-                                    ))}
-                                </div>
-                            </CardContent>
-                        </Card> */}
-
-                        {/* Amenities */}
-                        {/* <Card>
-                            <CardHeader>
-                                <CardTitle>Tiện ích</CardTitle>
-                            </CardHeader>
-                            <CardContent>
-                                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                                    {property.amenities.map((amenity: any, index: number) => (
-                                        <div key={index} className="flex flex-col items-center text-center p-3 bg-muted rounded-lg">
-                                            <amenity.icon className="h-6 w-6 text-accent mb-2" />
-                                            <span className="text-sm">{amenity.name}</span>
-                                        </div>
-                                    ))}
-                                </div>
-                            </CardContent>
-                        </Card> */}
-
-                        {/* Nearby Places */}
-                        {/* <Card>
-                            <CardHeader>
-                                <CardTitle>Tiện ích xung quanh</CardTitle>
-                            </CardHeader>
-                            <CardContent>
-                                <div className="space-y-3">
-                                    {property.nearbyPlaces.map((place: any, index: number) => (
-                                        <div key={index} className="flex items-center justify-between">
-                                            <div className="flex items-center space-x-3">
-                                                <place.icon className="h-5 w-5 text-accent" />
-                                                <span>{place.name}</span>
-                                            </div>
-                                            <Badge variant="outline">{place.distance}</Badge>
-                                        </div>
-                                    ))}
-                                </div>
-                            </CardContent>
-                        </Card> */}
 
                         {/* Map */}
                         <Card>
@@ -464,20 +442,12 @@ export default function PropertyDetailPage() {
                             </CardHeader>
                             <CardContent>
                                 <div className="flex items-center space-x-3 mb-4">
-                                    {/* <Avatar>
-                                        <AvatarImage src={property.agent.avatar || "/placeholder.svg"} />
-                                        <AvatarFallback>{property.agent.name.charAt(0)}</AvatarFallback>
-                                    </Avatar> */}
                                     <div>
                                         <div className="font-semibold">{`${propertyDetail?.user?.firstName ?? ""} ${propertyDetail?.user?.lastName ?? ""}`}</div>
                                         <div className="text-sm text-muted-foreground">
                                             {propertyDetail?.user?.email}
                                         </div>
-                                        {/* <div className="flex items-center space-x-1">
-                                            <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
-                                            <span className="text-xs">{property.agent.rating}</span>
-                                            <span className="text-xs text-muted-foreground">({property.agent.reviews})</span>
-                                        </div> */}
+
                                     </div>
                                 </div>
 
@@ -490,62 +460,10 @@ export default function PropertyDetailPage() {
                                         <MessageCircle className="h-4 w-4 mr-2" />
                                         Nhắn tin
                                     </Button>
-                                    {/* <Button variant="outline" className="w-full bg-transparent">
-                                        <Calendar className="h-4 w-4 mr-2" />
-                                        Đặt lịch xem
-                                    </Button> */}
                                 </div>
                             </CardContent>
                         </Card>
 
-                        {/* Quick Actions */}
-                        {/* <Card>
-                            <CardHeader>
-                                <CardTitle>Thao tác nhanh</CardTitle>
-                            </CardHeader>
-                            <CardContent className="space-y-2">
-                                <Button variant="outline" className="w-full justify-start bg-transparent">
-                                    <Heart className="h-4 w-4 mr-2" />
-                                    Lưu vào yêu thích
-                                </Button>
-                                <Button variant="outline" className="w-full justify-start bg-transparent">
-                                    <Share2 className="h-4 w-4 mr-2" />
-                                    Chia sẻ
-                                </Button>
-                                <Button variant="outline" className="w-full justify-start bg-transparent">
-                                    <ExternalLink className="h-4 w-4 mr-2" />
-                                    Xem trên bản đồ
-                                </Button>
-                            </CardContent>
-                        </Card> */}
-
-                        {/* Price Calculator */}
-                        {/* <Card>
-                            <CardHeader>
-                                <CardTitle>Tính toán chi phí</CardTitle>
-                            </CardHeader>
-                            <CardContent>
-                                <div className="space-y-3 text-sm">
-                                    <div className="flex justify-between">
-                                        <span>Giá bán:</span>
-                                        <span className="font-semibold">{formatPrice(property.price)}</span>
-                                    </div>
-                                    <div className="flex justify-between">
-                                        <span>Phí môi giới (2%):</span>
-                                        <span>{formatPrice(property.price * 0.02)}</span>
-                                    </div>
-                                    <div className="flex justify-between">
-                                        <span>Thuế TNCN (2%):</span>
-                                        <span>{formatPrice(property.price * 0.02)}</span>
-                                    </div>
-                                    <Separator />
-                                    <div className="flex justify-between font-semibold">
-                                        <span>Tổng chi phí:</span>
-                                        <span className="text-accent">{formatPrice(property.price * 1.04)}</span>
-                                    </div>
-                                </div>
-                            </CardContent>
-                        </Card> */}
                     </div>
                 </div>
             </div>

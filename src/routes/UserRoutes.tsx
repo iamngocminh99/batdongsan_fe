@@ -1,13 +1,8 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import ProtectedRoute from "./ProtectedRoute";
 import UserLayout from "../layouts/UserLayout";
-import Home from "../pages/user/Home";
-import SearchPage from "@/pages/user/SearchPage";
-import ProfilePage from "@/pages/user/ProfilePage";
 import FavoritesPage from "@/pages/user/FavoritesPage";
-import PropertyDetailPage from "@/pages/user/PropertyDetailPage";
 import ChatPage from "@/pages/user/chat/ChatPage";
-import PropertyListPage from "@/pages/user/PropertyListPage";
 
 
 export default function UserRoutes() {

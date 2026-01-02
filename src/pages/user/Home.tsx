@@ -331,25 +331,32 @@ export default function HomePage() {
                                             <span className="text-xl font-bold bg-gradient-to-r from-purple-600 to-pink-500 text-transparent bg-clip-text">
                                                 {formatPrice(property.price)} đ
                                             </span>
-                                            <div className="flex items-center space-x-1 text-yellow-500">
-                                                <Star className="h-4 w-4 fill-current" />
-                                                <span className="text-sm">4.5</span>
-                                            </div>
                                         </div>
                                         <div className="flex items-center space-x-4 text-sm text-muted-foreground">
-                                            <div className="flex items-center">
-                                                <Bed className="h-4 w-4 mr-1" />
-                                                {property.bedrooms} PN
-                                            </div>
-                                            <div className="flex items-center">
-                                                <Bath className="h-4 w-4 mr-1" />
-                                                {property.bathrooms} PT
-                                            </div>
-                                            <div className="flex items-center">
-                                                <Square className="h-4 w-4 mr-1" />
-                                                {property.floorAreaSqft || 0} m²
-                                            </div>
+
+                                            {(property.bedrooms ?? 0) > 0 && (
+                                                <div className="flex items-center">
+                                                    <Bed className="h-4 w-4 mr-1" />
+                                                    {property.bedrooms} PN
+                                                </div>
+                                            )}
+
+                                            {(property.bathrooms ?? 0) > 0 && (
+                                                <div className="flex items-center">
+                                                    <Bath className="h-4 w-4 mr-1" />
+                                                    {property.bathrooms} PT
+                                                </div>
+                                            )}
+
+                                            {Number(property.floorAreaSqft) > 0 && (
+                                                <div className="flex items-center">
+                                                    <Square className="h-4 w-4 mr-1" />
+                                                    {property.floorAreaSqft} m²
+                                                </div>
+                                            )}
+
                                         </div>
+
                                     </CardContent>
                                 </Card>
                             ))}
